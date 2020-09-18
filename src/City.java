@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class City {
@@ -50,6 +51,55 @@ public class City {
             System.out.println("new name:");
             name = scanner.next();
             this.setName(name);
+        }
+    }
+    static void citiesMenu( List<City> cities) {
+        int choice;
+        boolean end = false;
+        while (!end){
+            System.out.println("<< Cities Menu >>");
+            System.out.println("1.add city");
+            System.out.println("2.edit city");
+            System.out.println("3.show cities");
+            System.out.println("4.Back");
+            choice = Main.scanRightChoice(4);
+            switch (choice){
+                case 1 : addCity(cities); break;
+                case 2 : editCity(cities); break;
+                case 3 : showCities(cities); break;
+                case 4 : end = true; break;
+            }
+        }
+    }
+
+    static void addCity(List<City> cities) {
+        Scanner scanner = new Scanner(System.in);
+        double latitude,longitude;
+        String name;
+        System.out.println("add a city:");
+        System.out.println("1.name");
+        name = scanner.next();
+        System.out.println("2.latitude:");
+        latitude = scanner.nextDouble();
+        System.out.println("3.longitude:");
+        longitude = scanner.nextDouble();
+        City city = new City(name,latitude,longitude);
+        cities.add(city);
+    }
+
+    static void editCity(List<City> cities) {
+        System.out.println("choose a city:");
+        showCities(cities);
+        System.out.println("your choice:");
+        int cityChoice = Main.scanRightChoice(cities.size());
+        City city = cities.get(cityChoice-1);
+        System.out.println(city.getName()+" selected.");
+
+    }
+
+    static void showCities(List<City> cities) {
+        for (int i = 1; i <= cities.size(); i++) {
+            System.out.println(i+"."+cities.get(i-1));
         }
     }
 }
