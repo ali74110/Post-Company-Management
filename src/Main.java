@@ -86,7 +86,17 @@ public class Main {
     }
 
     static void searchCustomers(List<Customer> customers) {
-
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter customer name:");
+        String searchName = scanner.next();
+        List<Customer> wantedCustomers = new ArrayList<>();
+        for (Customer customer : customers){
+            if (customer.getName().contains(searchName)){
+                wantedCustomers.add(customer);
+            }
+        }
+        showCustomers(wantedCustomers);
+        goBack();
     }
 
 
@@ -156,11 +166,11 @@ public class Main {
             choice = scanRightChoice(7);
             switch (choice){
                 case 1 : addParcel(customers,parcels,cities); break;
-                case 2 : showParcels(parcels); break;
+                case 2 : showParcelsByFilter(customers,parcels,cities); break;
                 case 3 : trackParcel(parcels); break;
                 case 4 : sendParcels(parcels); break;
                 case 5 : updateParcels(parcels,cities); break;
-                case 6 : searchParcel(customers,cities); break;
+                case 6 : searchParcel(parcels); break;
                 case 7 : end = true; break;
             }
         }
@@ -261,6 +271,72 @@ public class Main {
 
     }
 
+    static void showParcelsByFilter(List<Customer> customers , List<Parcel> parcels , List<City> cities) {
+        System.out.println("1.show all parcels");
+        System.out.println("2.show by sending way");
+        System.out.println("3.show by parcel statue");
+        System.out.println("4.show by customers");
+        int choice = scanRightChoice(4);
+        if (choice == 1){
+            showParcels(parcels);
+            goBack();
+        }else if (choice == 2){
+            System.out.println("1.Airway");
+            System.out.println("2.Seaway");
+            System.out.println("3.Road");
+            int wayChoice = scanRightChoice(3);
+            List<Parcel> wantedParcels = new ArrayList<>();
+            for (Parcel parcel : parcels){
+                if (wayChoice==1 && parcel.getSendingWay()==SendingWay.AIRWAY){
+                    wantedParcels.add(parcel);
+                }else if (wayChoice==2 && parcel.getSendingWay()==SendingWay.SEAWAY){
+                    wantedParcels.add(parcel);
+                }else if (wayChoice==3 && parcel.getSendingWay()==SendingWay.ROAD){
+                    wantedParcels.add(parcel);
+                }
+            }
+            showParcels(wantedParcels);
+            goBack();
+        }else if (choice == 3){
+            System.out.println("1.not sent");
+            System.out.println("2.sent");
+            System.out.println("3.received");
+            int statueChoice = scanRightChoice(3);
+            List<Parcel> wantedParcels = new ArrayList<>();
+            for (Parcel parcel : parcels){
+                if (statueChoice==1 && parcel.getPostStatue()==PostStatue.NOT_SENT){
+                    wantedParcels.add(parcel);
+                }else if (statueChoice==2 && parcel.getPostStatue()==PostStatue.NOT_RECEIVED){
+                    wantedParcels.add(parcel);
+                }else if (statueChoice==3 && parcel.getPostStatue()==PostStatue.RECEIVED){
+                    wantedParcels.add(parcel);
+                }
+            }
+            showParcels(wantedParcels);
+            goBack();
+        }else if (choice == 4){
+            System.out.println("choose a customer:");
+            showCustomers(customers);
+            Customer customer = customers.get(scanRightChoice(customers.size()));
+            List<Parcel> wantedParcels = new ArrayList<>();
+            for (Parcel parcel : parcels){
+                  if (parcel.getSender().equals(customer) || parcel.getReceiver().equals(customer)){
+                      wantedParcels.add(parcel);
+                  }
+            }
+            showParcels(wantedParcels);
+            goBack();
+        }
+    }
+    static void goBack(){
+        Scanner scanner = new Scanner(System.in);
+        int choice = 1;
+        while (choice!=0){
+            System.out.println("Enter 0 to go back:");
+            choice = scanner.nextInt();
+        }
+    }
+
     static void showParcels(List<Parcel> parcels) {
         for (int i = 1; i <= parcels.size(); i++) {
             System.out.println(i+"."+parcels.get(i-1));
@@ -291,7 +367,18 @@ public class Main {
         parcel.update(cities);
     }
 
-    static void searchParcel(List<Customer> customers, List<City> cities) {
+    static void searchParcel(List<Parcel> parcels) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter parcel name:");
+        String searchName = scanner.next();
+        List<Parcel> wantedParcels = new ArrayList<>();
+        for (Parcel parcel : parcels){
+            if (parcel.getName().contains(searchName)){
+                wantedParcels.add(parcel);
+            }
+        }
+        showParcels(wantedParcels);
+        goBack();
     }
 
     public static int scanRightChoice(int limitation){
